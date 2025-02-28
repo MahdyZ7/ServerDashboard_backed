@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import subprocess
 import mysql.connector
-from datetime import datetime
 import logging
 from typing import Dict
 import os
@@ -136,7 +135,7 @@ def parse_top_users(data: str) -> Dict:
 				'user': user,
 				'cpu': float(cpu),
 				'mem': float(mem),
-				'disk': float(disk)
+				'disk': float(disk) if disk != 'nan' else 0
 			})
 		return top_users
 	except Exception as e:
@@ -300,8 +299,7 @@ def main():
 				store_metrics(metrics)
 				store_top_users(server['name'], top_users)
 			# Wait for 5 minutes
-			break
-			time.sleep(600)
+			time.sleep(900)
 		
 	except Exception as e:
 		logging.error(f"Error in main execution: {e}")
